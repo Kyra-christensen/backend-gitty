@@ -27,4 +27,26 @@ describe('alchemy-app routes', () => {
       status: 401
     });
   });
+
+  it('should allow authorized user to POST', async () => {
+    const agent = request.agent(app);
+
+    await agent
+      .get('/api/v1/github/login/callback?code=42')
+      .redirects(1);
+
+    const res = await agent
+      .post('/api/v1/posts')
+      .send({ 
+        title: 'This is fine',
+        text: '...everything is just fine' 
+      });
+
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      title: 'This is fine',
+      text: '...everything is just fine',
+      createdAt: expect.any(String),
+    });
+  });
 });
