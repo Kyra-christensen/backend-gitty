@@ -8,7 +8,7 @@ CREATE TABLE github_users (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   username TEXT NOT NULL,
   email TEXT,
-  avatar TEXT
+  avatar_url TEXT
 );
 
 CREATE TABLE posts (
