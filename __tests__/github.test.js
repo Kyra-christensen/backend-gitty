@@ -23,12 +23,28 @@ describe('gitty routes', () => {
     );
   });
 
-  it('should be able to sign in and redirect a user to /posts', async () => {
+  it.skip('it should be able to sign in and redirect users to /posts', async () => {
     const res = await request
       .agent(app)
       .get('/api/v1/github/login/callback?code=42')
-      .redirect(1);
+      .redirects(1);
 
     expect(res.req.path).toEqual('/api/v1/posts');
+  });
+
+  it('should be able to delete a users cookie/logs out', async () => {
+    const agent = request.agent(app);
+    
+    await agent
+      .get('/api/v1/github/login/callback?code=42')
+      .redirects(1);
+
+    const res = await agent
+      .delete('/api/v1/github');
+
+    expect(res.body).toEqual({
+      message: 'Signed out successfully!',
+      success: true,
+    });
   });
 });
