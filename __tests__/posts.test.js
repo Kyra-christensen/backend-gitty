@@ -49,4 +49,30 @@ describe('alchemy-app routes', () => {
       createdAt: expect.any(String),
     });
   });
+
+  it('should get a list of posts for logged in user', async () => {
+    const agent = request.agent(app);
+
+    await agent
+      .get('/api/v1/github/login/callback?code=42')
+      .redirects(1);
+    
+    const res = await agent 
+      .get('/api/v1/posts');
+
+    expect(res.body).toEqual([
+      {
+        id: expect.any(String),
+        title: 'Need Sleep',
+        text: 'Cant sleep....',
+        createdAt: expect.any(String),
+      }, 
+      {
+        id: expect.any(String),
+        title: 'Follow-up post',
+        text: 'Because of my cats.',
+        createdAt: expect.any(String),
+      }
+    ]);
+  });
 });
